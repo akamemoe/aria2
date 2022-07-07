@@ -216,6 +216,9 @@ int openFileWithFlags(const std::string& filename, int flags,
   while ((fd = a2open(utf8ToWChar(filename).c_str(), flags, OPEN_MODE)) == -1 &&
          errno == EINTR)
     ;
+  if (fd < 0){
+    while ((fd = a2open(filename.substr(0,250).c_str(), flags, OPEN_MODE)) == -1 && errno == EINTR);
+  }
   if (fd < 0) {
     int errNum = errno;
     throw DL_ABORT_EX3(
